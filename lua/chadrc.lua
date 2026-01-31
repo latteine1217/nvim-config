@@ -1,3 +1,10 @@
+--[[
+Module: chadrc
+Purpose: NvChad 框架主配置（UI、插件、工具鏈）
+Dependencies: NvChad core
+Usage: 由 NvChad 自動載入
+--]]
+
 ---@type ChadrcConfig
 local M = {}
 

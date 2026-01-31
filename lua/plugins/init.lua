@@ -1,4 +1,11 @@
 return {
+  -- 修復 LuaSnip jsregexp submodule 問題
+  {
+    "L3MON4D3/LuaSnip",
+    build = "make install_jsregexp", -- 正確的 build 步驟
+    dependencies = "rafamadriz/friendly-snippets",
+  },
+
   {
     "stevearc/conform.nvim",
     event = "BufWritePre",
@@ -17,34 +24,12 @@ return {
 
   {
     "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
-        "lua-language-server",
-        "stylua",
-        "html-lsp",
-        "css-lsp",
-        "prettier",
-        "typescript-language-server",
-      },
-    },
+    -- ensure_installed 已移至 chadrc.lua 統一管理
   },
 
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        "vim",
-        "lua", 
-        "vimdoc",
-        "html",
-        "css",
-        "javascript",
-        "typescript",
-        "python",
-        "json",
-        "yaml",
-      },
-    },
+    -- ensure_installed 已移至 chadrc.lua 統一管理
   },
 
   {
@@ -107,48 +92,100 @@ return {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
-    opts = {
-      suggestion = {
-        enabled = true,
-        auto_trigger = true,
-        debounce = 75,
-        keymap = {
-          accept = "<M-l>",
-          accept_word = false,
-          accept_line = false,
-          next = "<M-]>",
-          prev = "<M-[>",
-          dismiss = "<C-]>",
-        },
-      },
-      panel = {
-        enabled = true,
-        auto_refresh = false,
-        keymap = {
-          jump_prev = "[[",
-          jump_next = "]]",
-          accept = "<CR>",
-          refresh = "gr",
-          open = "<M-CR>",
-        },
-        layout = {
-          position = "bottom",
-          ratio = 0.4,
-        },
-      },
-      filetypes = {
-        yaml = false,
-        markdown = false,
-        help = false,
-        gitcommit = false,
-        gitrebase = false,
-        hgcommit = false,
-        svn = false,
-        cvs = false,
-        [".env"] = false,
-      },
-      copilot_node_command = "node",
-      server_opts_overrides = {},
-    },
+    config = function()
+      require("configs.copilot")
+    end,
   },
+
+  -- ========================================
+  -- 🎨 視覺與操作增強插件（推薦安裝）
+  -- ========================================
+
+  -- 超快速跳轉（取代 f/t）
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
+    config = function()
+      require("configs.flash")
+    end,
+  },
+
+  -- TODO/FIXME 高亮與快速搜尋
+  {
+    "folke/todo-comments.nvim",
+    event = "BufReadPost",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("configs.todo-comments")
+    end,
+  },
+
+  -- 括號/引號快速操作
+  {
+    "kylechui/nvim-surround",
+    version = "*",
+    event = "VeryLazy",
+    config = function()
+      require("configs.surround")
+    end,
+  },
+
+  -- 診斷/錯誤面板
+  {
+    "folke/trouble.nvim",
+    cmd = { "TroubleToggle", "Trouble" },
+    config = function()
+      require("configs.trouble")
+    end,
+  },
+
+  -- 浮動終端管理
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    cmd = { "ToggleTerm", "TermExec" },
+    config = function()
+      require("configs.toggleterm")
+    end,
+  },
+
+  -- ========================================
+  -- 🎯 可選增強插件（視需求安裝）
+  -- ========================================
+
+  -- 美化 UI 輸入框
+  -- {
+  --   "stevearc/dressing.nvim",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("configs.dressing")
+  --   end,
+  -- },
+
+  -- 高亮游標下相同詞
+  -- {
+  --   "RRethy/vim-illuminate",
+  --   event = "BufReadPost",
+  --   config = function()
+  --     require("configs.illuminate")
+  --   end,
+  -- },
+
+  -- 現代化代碼折疊
+  -- {
+  --   "kevinhwang91/nvim-ufo",
+  --   dependencies = "kevinhwang91/promise-async",
+  --   event = "BufReadPost",
+  --   config = function()
+  --     require("configs.ufo")
+  --   end,
+  -- },
+
 }
