@@ -10,7 +10,13 @@ local nvchad_lsp = require("nvchad.configs.lspconfig")
 
 local on_attach = nvchad_lsp.on_attach
 local on_init = nvchad_lsp.on_init
-local capabilities = nvchad_lsp.capabilities
+
+-- LSP capabilities：blink.cmp 已取代 nvim-cmp，由 blink 提供補全能力宣告
+-- 若 blink.cmp 載入失敗，回退到 NvChad 預設（在 lazy-load 時序前仍可用）
+local ok_blink, blink = pcall(require, "blink.cmp")
+local capabilities = ok_blink
+    and blink.get_lsp_capabilities(nvchad_lsp.capabilities, true)
+    or nvchad_lsp.capabilities
 
 --- 配置並啟動 LSP server(帶有 NvChad 預設設定)
 ---@param server string LSP server 名稱(例如 "pyright", "ts_ls")

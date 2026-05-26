@@ -6,6 +6,51 @@ return {
     dependencies = "rafamadriz/friendly-snippets",
   },
 
+  -- ========================================
+  -- ⛔ 關閉 NvChad 內建的 nvim-cmp 生態（由 blink.cmp 接管）
+  -- ========================================
+  { "hrsh7th/nvim-cmp",       enabled = false },
+  { "hrsh7th/cmp-nvim-lsp",   enabled = false },
+  { "hrsh7th/cmp-nvim-lua",   enabled = false },
+  { "hrsh7th/cmp-buffer",     enabled = false },
+  { "saadparwaiz1/cmp_luasnip", enabled = false },
+  { "FelipeLema/cmp-async-path", enabled = false },
+
+  -- ========================================
+  -- ⚡ blink.cmp：高效能補全（取代 nvim-cmp）
+  -- ========================================
+  {
+    "saghen/blink.cmp",
+    version = "*", -- 使用釋出版本（含預編 fuzzy matcher）
+    event = { "InsertEnter", "CmdlineEnter" },
+    dependencies = {
+      "L3MON4D3/LuaSnip",
+      "rafamadriz/friendly-snippets",
+    },
+    config = function()
+      require("configs.blink")
+    end,
+  },
+
+  -- ========================================
+  -- 🤖 avante.nvim：Cursor 風格 sidebar（Copilot provider）
+  -- ========================================
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    version = false, -- 取最新 main，avante 仍快速迭代
+    build = "make",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      "nvim-tree/nvim-web-devicons",
+      "zbirenbaum/copilot.lua", -- 同時做 provider 依賴
+    },
+    config = function()
+      require("configs.avante")
+    end,
+  },
+
   {
     "stevearc/conform.nvim",
     event = "BufWritePre",
@@ -157,34 +202,82 @@ return {
   },
 
   -- ========================================
-  -- 🎯 可選增強插件（視需求安裝）
+  -- 🎯 已啟用增強插件
   -- ========================================
 
   -- 美化 UI 輸入框
-  -- {
-  --   "stevearc/dressing.nvim",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("configs.dressing")
-  --   end,
-  -- },
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("configs.dressing")
+    end,
+  },
 
-  -- 高亮游標下相同詞
+  -- 現代化代碼折疊
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
+    event = "BufReadPost",
+    config = function()
+      require("configs.ufo")
+    end,
+  },
+
+  -- ========================================
+  -- 🍿 QoL 集合：snacks.nvim（folke）
+  -- ========================================
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    config = function()
+      require("configs.snacks")
+    end,
+  },
+
+  -- ========================================
+  -- 📁 oil.nvim：buffer-style 目錄編輯
+  -- ========================================
+  {
+    "stevearc/oil.nvim",
+    lazy = false, -- 需要在 nvim <dir> 啟動時即可用
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("configs.oil")
+    end,
+  },
+
+  -- ========================================
+  -- 🤖 CodeCompanion.nvim：AI chat / inline edit（使用 Copilot adapter）
+  -- ========================================
+  {
+    "olimorris/codecompanion.nvim",
+    cmd = {
+      "CodeCompanion",
+      "CodeCompanionChat",
+      "CodeCompanionActions",
+      "CodeCompanionCmd",
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("configs.codecompanion")
+    end,
+  },
+
+  -- ========================================
+  -- 🎯 預留可選（保留註解，需要時自行啟用）
+  -- ========================================
+
+  -- 高亮游標下相同詞（snacks.words 可替代，避免重複）
   -- {
   --   "RRethy/vim-illuminate",
   --   event = "BufReadPost",
   --   config = function()
   --     require("configs.illuminate")
-  --   end,
-  -- },
-
-  -- 現代化代碼折疊
-  -- {
-  --   "kevinhwang91/nvim-ufo",
-  --   dependencies = "kevinhwang91/promise-async",
-  --   event = "BufReadPost",
-  --   config = function()
-  --     require("configs.ufo")
   --   end,
   -- },
 
