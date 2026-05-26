@@ -6,10 +6,10 @@ Usage: 由 plugins/init.lua 在啟動階段載入（priority=1000）
 
 設計取捨：
 - 不啟用 notifier：noice + nvim-notify 已接管通知
-- 不啟用 indent：NvChad 已內建 indent-blankline
-- 不啟用 dashboard：NvChad 已有 nvdash
+- 不啟用 indent：indent-blankline 已單獨啟用
+- ✅ 啟用 dashboard：取代 NvChad nvdash
 - 不啟用 lazygit / terminal：toggleterm 已綁 <leader>gg / <C-\>
-- 不啟用 picker / explorer：避免與 NvChad 的 telescope / nvim-tree 衝突
+- 不啟用 picker / explorer：保留 telescope / nvim-tree 既有體驗
 --]]
 
 local ok, snacks = pcall(require, "snacks")
@@ -50,14 +50,45 @@ snacks.setup({
   -- Git 整合：用瀏覽器開啟當前檔案在 GitHub/GitLab 的位置
   gitbrowse = { enabled = true },
 
+  -- Dashboard：取代 NvChad nvdash
+  dashboard = {
+    enabled = true,
+    preset = {
+      header = table.concat({
+        "           ▄ ▄                   ",
+        "       ▄   ▄▄▄     ▄ ▄▄▄ ▄ ▄     ",
+        "       █ ▄ █▄█ ▄▄▄ █ █▄█ █ █     ",
+        "    ▄▄ █▄█▄▄▄█ █▄█▄█▄▄█▄▄█ █     ",
+        "  ▄ █▄▄█ ▄ ▄▄ ▄█ ▄▄▄▄▄▄▄▄▄▄▄▄▄▄  ",
+        "  █▄▄▄▄ ▄▄▄ █ ▄ ▄▄▄ ▄ ▄▄▄ ▄ ▄ █ ▄",
+        "▄ █ █▄█ █▄█ █ █ █▄█ █ █▄█ ▄▄▄ █ █",
+        "█▄█ ▄ █▄▄█▄▄█ █ ▄▄█ █ ▄ █ █▄█▄█ █",
+        "    █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█ █▄█▄▄▄█    ",
+      }, "\n"),
+      keys = {
+        { icon = " ", key = "f", desc = "Find File",     action = ":Telescope find_files" },
+        { icon = " ", key = "n", desc = "New File",      action = ":ene | startinsert" },
+        { icon = " ", key = "g", desc = "Find Text",     action = ":Telescope live_grep" },
+        { icon = " ", key = "r", desc = "Recent Files",  action = ":Telescope oldfiles" },
+        { icon = " ", key = "c", desc = "Config",        action = ":e $MYVIMRC" },
+        { icon = "󰒲 ", key = "L", desc = "Lazy",          action = ":Lazy" },
+        { icon = " ", key = "q", desc = "Quit",          action = ":qa" },
+      },
+    },
+    sections = {
+      { section = "header" },
+      { section = "keys", gap = 1, padding = 1 },
+      { section = "startup" },
+    },
+  },
+
   -- 關閉預設不需要的（顯式列出方便日後啟用）
-  notifier   = { enabled = false },
-  indent     = { enabled = false },
-  dashboard  = { enabled = false },
-  lazygit    = { enabled = false },
-  terminal   = { enabled = false },
-  picker     = { enabled = false },
-  explorer   = { enabled = false },
+  notifier     = { enabled = false },
+  indent       = { enabled = false },
+  lazygit      = { enabled = false },
+  terminal     = { enabled = false },
+  picker       = { enabled = false },
+  explorer     = { enabled = false },
   statuscolumn = { enabled = false },
 })
 

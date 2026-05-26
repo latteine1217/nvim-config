@@ -1,45 +1,91 @@
 --[[
 Module: options
-Purpose: 編輯器選項設定（擴展 NvChad 預設值）
-Dependencies: nvchad.options
-Usage: 由 init.lua 自動載入
+Purpose: 編輯器選項（已脫離 NvChad，所有預設明示設定）
+Usage: 由 init.lua 載入
 --]]
 
-require("nvchad.options")
-
 local opt = vim.opt
-local g = vim.g
+local g   = vim.g
 
--- === 顯示設定 ===
+-- =============================================================
+-- 顯示
+-- =============================================================
+opt.number         = true
+opt.relativenumber = true
+opt.wrap           = false
+opt.scrolloff      = 8
+opt.sidescrolloff  = 8
+opt.cursorline     = true
+opt.signcolumn     = "yes"
+opt.cmdheight      = 1
+opt.showmode       = false      -- mode 由 lualine 顯示
+opt.laststatus     = 3          -- 單一 global statusline（與 lualine globalstatus 對齊）
+opt.termguicolors  = true
+opt.background     = "dark"
+opt.pumheight      = 10
+opt.fillchars:append({ eob = " " })
 
-opt.relativenumber = true  -- 相對行號（便於移動）
-opt.wrap = false           -- 不自動換行
-opt.scrolloff = 8          -- 游標上下保留 8 行
-opt.sidescrolloff = 8      -- 游標左右保留 8 列
-opt.cursorline = true      -- 高亮當前行
+-- =============================================================
+-- 縮排
+-- =============================================================
+opt.expandtab    = true
+opt.shiftwidth   = 2
+opt.tabstop      = 2
+opt.softtabstop  = 2
+opt.smartindent  = true
 
--- === 縮排設定 ===
-opt.expandtab = true       -- 使用空格替代 Tab
-opt.shiftwidth = 2         -- 自動縮排寬度
-opt.tabstop = 2            -- Tab 寬度
-opt.softtabstop = 2        -- 編輯時 Tab 寬度
+-- =============================================================
+-- 搜尋
+-- =============================================================
+opt.ignorecase = true
+opt.smartcase  = true
+opt.hlsearch   = true
+opt.incsearch  = true
 
--- === 搜尋設定 ===
-opt.ignorecase = true      -- 搜尋時忽略大小寫
-opt.smartcase = true       -- 若包含大寫則區分大小寫
+-- =============================================================
+-- Buffer / Window 行為
+-- =============================================================
+opt.splitright = true
+opt.splitbelow = true
+opt.mouse      = "a"
+opt.completeopt = { "menu", "menuone", "noselect" }
+opt.shortmess:append("sIcCFW")
 
--- === 剪貼板整合 ===
-opt.clipboard = "unnamedplus"  -- 使用系統剪貼板
+-- =============================================================
+-- 剪貼板與檔案
+-- =============================================================
+opt.clipboard   = "unnamedplus"
+opt.backup      = false
+opt.writebackup = false
+opt.swapfile    = false
+opt.undofile    = true
+opt.undolevels  = 10000
+opt.confirm     = true
 
--- === 備份與快取 ===
-opt.backup = false         -- 不建立備份檔
-opt.writebackup = false    -- 寫入時不建立備份
-opt.swapfile = false       -- 不建立 swap 檔案
-opt.undofile = true        -- 保留 undo 歷史
+-- =============================================================
+-- 效能
+-- =============================================================
+opt.updatetime = 300
+opt.timeoutlen = 500
+opt.redrawtime = 1500
+opt.synmaxcol  = 240
+opt.lazyredraw = false  -- 與 noice / blink.cmp 動畫相容
 
--- === 效能設定 ===
-opt.updatetime = 300       -- CursorHold 觸發時間（ms）
-opt.timeoutlen = 500       -- 按鍵組合等待時間（ms）
+-- =============================================================
+-- Folding（與 nvim-ufo 對齊）
+-- =============================================================
+opt.foldcolumn     = "1"
+opt.foldlevel      = 99
+opt.foldlevelstart = 99
+opt.foldenable     = true
 
--- === 字體設定 ===
-g.have_nerd_font = true    -- 啟用 Nerd Font 圖示
+-- =============================================================
+-- 全域旗標
+-- =============================================================
+g.mapleader      = " "
+g.maplocalleader = " "
+g.have_nerd_font = true
+
+-- 關閉內建插件（用不到，避免影響 oil/nvim-tree）
+g.loaded_netrw       = 1
+g.loaded_netrwPlugin = 1
