@@ -11,21 +11,15 @@ if not ok then
   return
 end
 
-surround.setup({
-  keymaps = {
-    insert = "<C-g>s", -- Insert 模式：Ctrl+g s
-    insert_line = "<C-g>S",
-    normal = "ys", -- Normal 模式：ys{motion}{char}
-    normal_cur = "yss", -- 當前行：yss{char}
-    normal_line = "yS",
-    normal_cur_line = "ySS",
-    visual = "S", -- Visual 模式：S{char}
-    visual_line = "gS",
-    delete = "ds", -- 刪除：ds{char}
-    change = "cs", -- 替換：cs{old}{new}
-    change_line = "cS",
-  },
+-- nvim-surround v4 已不再透過 setup() 設 keymaps；下列預設鍵位由插件自帶：
+--   Insert       <C-g>s / <C-g>S
+--   Normal       ys{motion}{char}  /  yss{char}  /  yS  /  ySS
+--   Visual       S{char}  /  gS
+--   Delete       ds{char}
+--   Change       cs{old}{new}  /  cS
+-- 如要改變鍵位，使用 vim.keymap.set 對應 <Plug>(nvim-surround-*)
 
+surround.setup({
   -- 常用包圍字元別名
   aliases = {
     ["a"] = ">", -- a = angle brackets <>

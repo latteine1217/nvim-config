@@ -24,6 +24,7 @@ opt.termguicolors  = true
 opt.background     = "dark"
 opt.pumheight      = 10
 opt.fillchars:append({ eob = " " })
+opt.winborder      = "rounded"   -- 0.11+：所有浮動視窗統一圓角邊框
 
 -- =============================================================
 -- 縮排

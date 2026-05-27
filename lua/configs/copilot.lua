@@ -20,7 +20,9 @@ copilot.setup({
       jump_next = "]]",
       accept = "<CR>",
       refresh = "gr",
-      open = "<M-CR>", -- Alt+Enter 開啟建議面板
+      -- Mac 終端機 Option 預設不送 Meta，原 <M-CR> 改為 <C-CR>（多數現代 terminal 支援）
+      -- 或從 normal mode 用 :Copilot panel / <leader>cp
+      open = "<C-CR>",
     },
     layout = {
       position = "bottom", -- 建議面板位置: top, bottom, left, right
@@ -34,12 +36,13 @@ copilot.setup({
     hide_during_completion = true, -- 在補全選單開啟時隱藏
     debounce = 75, -- 延遲時間（ms）
     keymap = {
-      accept = "<M-l>", -- Alt+l 接受建議（避免與 Tab 衝突）
-      accept_word = false,
+      -- Mac 友善：避開所有 <M-*>（Option 不送 Meta）
+      accept      = "<C-y>",     -- Ctrl+y 接受整段（LazyVim 慣例）
+      accept_word = "<C-Right>", -- Ctrl+→ 只接受下一個 word
       accept_line = false,
-      next = "<M-]>", -- Alt+] 下一個建議
-      prev = "<M-[>", -- Alt+[ 上一個建議
-      dismiss = "<C-]>", -- Ctrl+] 關閉建議
+      next        = false,        -- 多數情況用不到、又難綁；如需打開 <leader>cp 面板瀏覽
+      prev        = false,
+      dismiss     = "<C-]>",     -- Ctrl+] 關閉當前建議（Mac 可直接打）
     },
   },
 
@@ -65,3 +68,6 @@ vim.api.nvim_create_user_command("CopilotStatus", function()
   local message = status == "Normal" and "Copilot: ✅ 已啟用" or "Copilot: ❌ " .. status
   vim.notify(message, vim.log.levels.INFO)
 end, {})
+
+-- Normal mode：開啟 Copilot 面板（取代原 Alt+Enter）
+vim.keymap.set("n", "<leader>cp", "<cmd>Copilot panel<cr>", { desc = "Copilot panel" })

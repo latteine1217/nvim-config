@@ -90,10 +90,12 @@ avante.setup({
       next    = "]x",
       prev    = "[x",
     },
+    -- avante 的 inline suggestion 已關閉（auto_suggestions=false），
+    -- 這些鍵實際上不會觸發；保留欄位但用 Mac 友善的值，避免之後啟用時撞到
     suggestion = {
-      accept  = "<M-l>",
-      next    = "<M-]>",
-      prev    = "<M-[>",
+      accept  = "<C-y>",
+      next    = false,
+      prev    = false,
       dismiss = "<C-]>",
     },
     jump   = { next = "]]", prev = "[[" },

@@ -27,13 +27,15 @@ ts.setup({
 
   highlight  = { enable = true, additional_vim_regex_highlighting = false },
   indent     = { enable = true },
+  -- incremental selection 改用 gr-prefix（與 0.11+ 內建 grn/grr/gra 系列風格一致）
+  -- 避免和 blink.cmp 的 <C-Space> 觸發鍵衝突
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection    = "<C-space>",
-      node_incremental  = "<C-space>",
-      scope_incremental = false,
-      node_decremental  = "<bs>",
+      init_selection    = "grn", -- start
+      node_incremental  = "grn", -- expand
+      scope_incremental = "grs", -- expand to scope
+      node_decremental  = "grm", -- shrink
     },
   },
 })

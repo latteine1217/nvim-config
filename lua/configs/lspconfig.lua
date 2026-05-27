@@ -25,11 +25,9 @@ vim.diagnostic.config({
   float = { border = "rounded", source = true },
 })
 
--- 浮動視窗統一圓角邊框
-vim.lsp.handlers["textDocument/hover"] =
-  vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-vim.lsp.handlers["textDocument/signatureHelp"] =
-  vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+-- 浮動視窗圓角邊框由 options.lua 的 vim.o.winborder = "rounded" 統一處理
+-- （0.11+ 全域選項，套用於 hover / signature help / completion / 其他 LSP 浮窗）
+-- 原 vim.lsp.with() 寫法已於 0.11 廢棄
 
 -- =============================================================
 -- 共用 capabilities（blink.cmp 提供補全能力）
@@ -60,6 +58,14 @@ local function on_attach(_, bufnr)
   map("n", "<leader>cd", vim.diagnostic.open_float,   "Show diagnostic")
   map("n", "[d",         function() vim.diagnostic.jump({ count = -1 }) end, "Prev diagnostic")
   map("n", "]d",         function() vim.diagnostic.jump({ count = 1 })  end, "Next diagnostic")
+
+  -- Inlay hints toggle（0.12 native）
+  if vim.lsp.inlay_hint then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    map("n", "<leader>ti", function()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+    end, "Toggle inlay hints")
+  end
 end
 
 -- =============================================================

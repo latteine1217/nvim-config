@@ -58,11 +58,28 @@ blink.setup({
       show_in_snippet = true,
     },
 
-    -- 選單顯示
+    -- 選單顯示（kind icon 來自 lspkind，font 與 NerdFont 對齊）
     menu = {
       border = "rounded",
       draw = {
         treesitter = { "lsp" }, -- 用 treesitter 高亮 lsp 項目
+        columns = {
+          { "kind_icon", "label", gap = 1 },
+          { "kind" },
+        },
+        components = {
+          kind_icon = {
+            text = function(ctx)
+              local ok_lk, lspkind = pcall(require, "lspkind")
+              if ok_lk then
+                local icon = lspkind.symbolic(ctx.kind, { mode = "symbol" })
+                if icon and icon ~= "" then return icon .. " " end
+              end
+              return ctx.kind_icon .. ctx.icon_gap
+            end,
+            highlight = function(ctx) return "BlinkCmpKind" .. ctx.kind end,
+          },
+        },
       },
     },
 

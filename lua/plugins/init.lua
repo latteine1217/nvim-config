@@ -67,7 +67,7 @@ return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = { preset = "modern" },
+    config = function() require("configs.which-key") end,
   },
   {
     "folke/noice.nvim",
@@ -107,6 +107,45 @@ return {
     main = "ibl",
     event = "BufReadPost",
     opts = { indent = { char = "│" }, scope = { enabled = false } },
+  },
+
+  -- LSP progress 提示（右下角 spinner）
+  {
+    "j-hui/fidget.nvim",
+    event = "LspAttach",
+    opts = {
+      progress = {
+        display = {
+          done_icon = "✓",
+          progress_icon = { pattern = "dots", period = 1 },
+        },
+      },
+      notification = {
+        window = { winblend = 0, border = "rounded" },
+      },
+    },
+  },
+
+  -- 補全選單 kind icons（lspkind 風格）
+  { "onsails/lspkind.nvim", lazy = true },
+
+  -- Treesitter sticky context（長函式內顯示 function header）
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "BufReadPost",
+    opts = {
+      enable = true,
+      max_lines = 3,
+      min_window_height = 20,
+      line_numbers = true,
+      multiline_threshold = 1,
+      trim_scope = "outer",
+      mode = "cursor",
+      separator = "─",
+    },
+    keys = {
+      { "<leader>tc", "<cmd>TSContextToggle<cr>", desc = "Toggle TS context" },
+    },
   },
 
   -- =============================================================
@@ -199,16 +238,7 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      signs = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-        untracked = { text = "▎" },
-      },
-    },
+    config = function() require("configs.gitsigns") end,
   },
   {
     "stevearc/oil.nvim",
@@ -271,11 +301,8 @@ return {
       return { n_lines = 500 }
     end,
   },
-  {
-    "echasnovski/mini.move",
-    keys = { "<M-h>", "<M-j>", "<M-k>", "<M-l>" },
-    opts = {},
-  },
+  -- mini.move 預設用 <M-h/j/k/l>；Mac 終端 Option 不送 Meta，且 Visual mode 已有 J/K
+  -- 等價搬動選取，所以略過。若日後啟用，需自訂 opts.mappings 避開 Alt
   {
     "echasnovski/mini.bracketed",
     event = "BufReadPost",

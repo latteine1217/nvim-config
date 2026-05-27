@@ -16,7 +16,16 @@ vim.o.foldcolumn = "1" -- 顯示折疊欄位（'0' 隱藏）
 vim.o.foldlevel = 99 -- 預設展開所有折疊
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
-vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+
+-- 折疊欄位字元（每個欄位都需恰好 1 個字元；0.12+ 嚴格檢查）
+-- 使用常見 Unicode 三角形（U+25BE / U+25B8），確保跨字型一致顯示
+vim.opt.fillchars:append({
+  eob       = " ",
+  fold      = " ",
+  foldsep   = " ",
+  foldopen  = "▾",
+  foldclose = "▸",
+})
 
 ufo.setup({
   -- 折疊提供者優先順序
