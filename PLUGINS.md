@@ -1,493 +1,333 @@
-# 推薦插件指南
+# 插件清單
 
-本文檔列出所有推薦的 Neovim 增強插件，遵循**簡潔哲學**與**務實主義**原則。
+本檔列出此配置的所有插件，依用途分類；每項給出**用途**、**config 檔**、**主要快捷鍵**。
 
----
-
-## 📦 已安裝插件（預設）
-
-### 核心功能（NvChad 內建）
-
-| 插件 | 用途 | 狀態 |
-|------|------|------|
-| `nvim-cmp` | 自動補全引擎 | ✅ 已安裝 |
-| `nvim-lspconfig` | LSP 配置 | ✅ 已安裝 |
-| `mason.nvim` | LSP/Formatter 管理 | ✅ 已安裝 |
-| `nvim-treesitter` | 語法高亮 | ✅ 已安裝 |
-| `telescope.nvim` | 模糊搜尋 | ✅ 已安裝 |
-| `gitsigns.nvim` | Git 裝飾 | ✅ 已安裝 |
-| `Comment.nvim` | 快速註解 | ✅ 已安裝 |
-| `nvim-autopairs` | 自動配對 | ✅ 已安裝 |
-| `which-key.nvim` | 按鍵提示 | ✅ 已安裝 |
-| `nvim-tree.lua` | 檔案樹 | ✅ 已安裝 |
-| `nvim-colorizer.lua` | 顏色預覽 | ✅ 已安裝 |
-| `indent-blankline.nvim` | 縮排線 | ✅ 已安裝 |
-
-### 自訂安裝
-
-| 插件 | 用途 | 狀態 |
-|------|------|------|
-| `conform.nvim` | 代碼格式化 | ✅ 已安裝 |
-| `noice.nvim` | 現代化 UI | ✅ 已安裝 |
-| `copilot.lua` | AI 補全 | ✅ 已安裝 |
-| `vim-tmux-navigator` | Tmux 整合 | ✅ 已安裝 |
+完整 spec 在 `lua/plugins/init.lua`，各 plugin config 在 `lua/configs/<name>.lua`。
 
 ---
 
-## ⭐ 推薦插件（強烈建議安裝）
+## 🎨 UI / Theme
 
-### 1. flash.nvim - 超快速跳轉
+### catppuccin/nvim — 主題
 
-**為何推薦**:
-- 比傳統 `f/t/search` 快 10 倍
-- 視覺回饋清晰，零學習成本
-- 取代 hop.nvim / leap.nvim
+- **用途**：取代原 NvChad base46，提供 catppuccin mocha flavour
+- **config**：`configs/catppuccin.lua`
+- **整合**：blink_cmp / gitsigns / nvim-tree / telescope / bufferline / mini / mason / which_key / flash / snacks
 
-**使用方式**:
-```vim
-s{char}      " 跳轉到任意字元
-S            " Treesitter 節點跳轉
-/pattern     " 搜尋時自動顯示跳轉標籤
-```
+### nvim-lualine/lualine.nvim — Statusline
 
-**配置檔案**: `lua/configs/flash.lua`
-**狀態**: ✅ 已配置
+- **用途**：復刻 NvChad default 樣式：圓潤 mode/location 塊、平整中段
+- **config**：`configs/lualine.lua`
+- **顯示**：mode → branch → filename/diff/diagnostics → recording / lazy updates / LSP server / encoding / cwd / filetype → progress → location
+- **半圓塊**：用 `string.char` 構造 UTF-8 位元組避開 PUA 過濾
 
----
+### akinsho/bufferline.nvim — Buffer tabs
 
-### 2. todo-comments.nvim - TODO 高亮
+- **用途**：頂端 buffer 分頁條
+- **config**：`configs/bufferline.lua`
+- **快捷鍵**：`<S-h>`/`<S-l>` 切換、`<leader>x` 關閉、`<leader>bp` pin、`<leader>bo` close others
 
-**為何推薦**:
-- 自動高亮 `TODO`, `FIXME`, `NOTE` 等關鍵字
-- 可用 Telescope 快速搜尋所有 TODO
-- 符合你的文檔化紀律原則
+### folke/snacks.nvim — QoL 集合
 
-**效果**:
-```lua
--- TODO: 這會顯示為藍色高亮
--- FIXME: 這會顯示為紅色警告
--- PERF: 效能優化提醒
-```
+- **用途**：folke 的多功能 QoL 套件
+- **config**：`configs/snacks.lua`
+- **啟用模組**：
+  - `bigfile`（大檔自動關昂貴功能）
+  - `quickfile`（加速大檔開啟）
+  - `scope`（智慧縮排區塊偵測）
+  - `scratch`（草稿 buffer）
+  - `gitbrowse`（用瀏覽器打開 GitHub 連結）
+  - `dashboard`（取代 NvChad nvdash，沿用原 ASCII header）
+- **快捷鍵**：`<leader>.` scratch、`<leader>S` select scratch、`<leader>gB` git browse
+- **不啟用**：notifier（noice 接管）、indent（indent-blankline 接管）、lazygit（toggleterm 接管）、picker/explorer（telescope/nvim-tree 接管）
 
-**快捷鍵**:
-- `<leader>ft` - 使用 Telescope 搜尋所有 TODO
+### folke/which-key.nvim — Leader 浮窗
 
-**配置檔案**: `lua/configs/todo-comments.lua`
-**狀態**: ✅ 已配置
+- **用途**：按 `<leader>` 後顯示分群選單
+- **config**：`configs/which-key.lua`
+- **分群**：a=CodeCompanion / A=Avante / b=Buffer / c=Code / f=Find / g=Git / r=Rename / s=Split / t=Terminal-or-Toggle
 
----
+### folke/noice.nvim — 現代化命令列 UI
 
-### 3. nvim-surround - 括號操作
+- **用途**：取代 default cmdline、訊息提示、search popup
+- **依賴**：nui.nvim、nvim-notify
+- **opts**：`bottom_search`、`command_palette`、`long_message_to_split`
 
-**為何推薦**:
-- 快速新增/修改/刪除括號、引號、標籤
-- 減少重複編輯動作
-- 符合 Good Taste 原則（簡潔優雅）
+### stevearc/dressing.nvim — vim.ui 美化
 
-**使用方式**:
-```vim
-ysiw"        " 為當前詞加上雙引號: hello → "hello"
-cs"'         " 替換引號: "hello" → 'hello'
-ds"          " 刪除引號: "hello" → hello
-yss)         " 為整行加括號
-```
+- **用途**：`vim.ui.select` / `vim.ui.input` 改用 telescope dropdown 與漂亮輸入框
+- **config**：`configs/dressing.lua`
 
-**常用操作**:
-- `ysiwb` - 加圓括號 `()`
-- `ysiwB` - 加大括號 `{}`
-- `ysiwr` - 加方括號 `[]`
-- `cst<div>` - 替換 HTML 標籤
+### folke/todo-comments.nvim — TODO 高亮
 
-**配置檔案**: `lua/configs/surround.lua`
-**狀態**: ✅ 已配置
+- **用途**：自動高亮 `TODO`、`FIXME`、`NOTE`、`PERF` 等關鍵字
+- **config**：`configs/todo-comments.lua`
+- **指令**：`:TodoTelescope` 列出所有
 
----
+### lukas-reineke/indent-blankline.nvim — 縮排線
 
-### 4. trouble.nvim - 診斷面板
+- **用途**：顯示縮排垂直線
+- **opts**：`indent.char = "│"`、`scope.enabled = false`
 
-**為何推薦**:
-- 集中顯示所有 LSP 錯誤/警告
-- 取代內建的 quickfix
-- 符合可觀測性原則
+### j-hui/fidget.nvim — LSP 進度提示
 
-**快捷鍵**:
-- `<leader>xx` - 切換 Trouble 面板
-- `<leader>xw` - 工作區診斷
-- `<leader>xd` - 當前檔案診斷
-- `gR` - LSP 引用列表
+- **用途**：右下角顯示 LSP loading spinner
+- **event**：`LspAttach` 時載入
 
-**配置檔案**: `lua/configs/trouble.lua`
-**狀態**: ✅ 已配置
+### nvim-treesitter/nvim-treesitter-context — Sticky function header
+
+- **用途**：長函式內捲動時頂端顯示 sticky context
+- **快捷鍵**：`<leader>tc` toggle
+- **opts**：max_lines 3、mode cursor
+
+### onsails/lspkind.nvim — 補全 kind icons
+
+- **用途**：供 blink.cmp menu 顯示 function / variable / method 等圖示
 
 ---
 
-### 5. toggleterm.nvim - 終端管理
+## ⚡ Completion / Snippets
 
-**為何推薦**:
-- 浮動終端，不破壞佈局
-- 支援多終端、Lazygit 整合
-- 符合 CLI Tools First 原則
+### saghen/blink.cmp — 補全引擎
 
-**快捷鍵**:
-- `Ctrl+\` - 切換浮動終端
-- `<leader>tf` - 浮動終端
-- `<leader>th` - 水平分割終端
-- `<leader>tv` - 垂直分割終端
-- `<leader>gg` - 開啟 Lazygit
-- `<leader>tp` - Python REPL
-- `<leader>tn` - Node REPL
+- **用途**：取代 nvim-cmp，0.5–4ms / keystroke
+- **config**：`configs/blink.lua`
+- **sources**：lsp、snippets、path、buffer（內建）
+- **snippet 後端**：LuaSnip
+- **keymap preset**：`default`（`<C-Space>` 觸發、`<C-n>`/`<C-p>` 上下、`<CR>` 接受）
+- **額外**：`<Tab>` snippet jump、`<C-d>`/`<C-u>` 捲文件
+- **整合**：menu 用 lspkind icon、cmdline 也啟用補全
+- **被關閉的舊套件**（spec 內 `enabled = false`）：`nvim-cmp` / `cmp-nvim-lsp` / `cmp-nvim-lua` / `cmp-buffer` / `cmp_luasnip` / `cmp-async-path`
 
-**終端內按鍵**:
-- `Esc` 或 `jk` - 退出終端模式
-- `Ctrl+h/j/k/l` - 切換窗口
+### L3MON4D3/LuaSnip — Snippet 引擎
 
-**配置檔案**: `lua/configs/toggleterm.lua`
-**狀態**: ✅ 已配置
+- **依賴**：friendly-snippets
+- **build**：`make install_jsregexp`
 
----
+### rafamadriz/friendly-snippets — Snippet 集
 
-## 🎯 可選插件（視需求安裝）
-
-以下插件已建立配置檔案，但預設**註解停用**。若需要，取消 `plugins/init.lua` 中對應插件的註解即可啟用。
-
-### 6. dressing.nvim - 美化 UI
-
-**用途**: 使用 Telescope 取代 `vim.ui.select` 和 `vim.ui.input`
-
-**效果**:
-- 重新命名變數時顯示漂亮的輸入框
-- 選擇 Code Action 時使用 Telescope
-
-**啟用方式**:
-```lua
--- 在 plugins/init.lua 中取消註解
-{
-  "stevearc/dressing.nvim",
-  event = "VeryLazy",
-  config = function()
-    require("configs.dressing")
-  end,
-},
-```
-
-**配置檔案**: `lua/configs/dressing.lua`
-**狀態**: ⏸️ 已配置但未啟用
+- **用途**：社群維護的多語言 snippet 庫
 
 ---
 
-### 7. vim-illuminate - 高亮相同詞
+## 🤖 AI 三層
 
-**用途**: 自動高亮游標下的所有相同詞彙（包括變數、函式名）
+### zbirenbaum/copilot.lua — Ghost text 補完
 
-**效果**:
-- 游標移至 `foo` → 所有 `foo` 自動高亮
-- 支援 LSP（識別語義，而非純字串匹配）
+- **用途**：打字時自動跳出灰字提示
+- **config**：`configs/copilot.lua`
+- **快捷鍵（Mac 友善）**：
+  - `<C-y>` 接受整段
+  - `<C-Right>` 接受 word
+  - `<C-]>` 關閉建議
+  - `<C-CR>` 開啟 panel
+  - `<leader>cp` 開啟 panel（normal mode）
+- **互動**：`hide_during_completion = true`，blink 選單開時隱藏 ghost
+- **不啟用 filetype**：yaml、markdown、help、gitcommit、gitrebase
 
-**快捷鍵**:
-- `]]` - 跳至下一個高亮處
-- `[[` - 跳至上一個高亮處
+### olimorris/codecompanion.nvim — AI Chat
 
-**啟用方式**:
-```lua
-{
-  "RRethy/vim-illuminate",
-  event = "BufReadPost",
-  config = function()
-    require("configs.illuminate")
-  end,
-},
-```
+- **用途**：對話、refactor、slash commands
+- **config**：`configs/codecompanion.lua`
+- **adapter**：copilot（沿用既有認證）、model=claude-sonnet-4
+- **快捷鍵**：`<leader>ac` chat / `<leader>aa` actions / `<leader>ae` 加選取進 chat / `<leader>ai` inline
 
-**配置檔案**: `lua/configs/illuminate.lua`
-**狀態**: ⏸️ 已配置但未啟用
+### yetone/avante.nvim — Cursor 風格 sidebar
 
----
-
-### 8. nvim-ufo - 現代化折疊
-
-**用途**: 美化的代碼折疊，支援 LSP、Treesitter
-
-**效果**:
-- 折疊時顯示預覽（不需展開即可查看內容）
-- 智慧折疊（依據語法結構）
-
-**快捷鍵**:
-- `zR` - 展開所有折疊
-- `zM` - 收合所有折疊
-- `zp` - 預覽折疊內容
-
-**前置需求**:
-```bash
-# 需要額外依賴
-{
-  "kevinhwang91/nvim-ufo",
-  dependencies = "kevinhwang91/promise-async",
-}
-```
-
-**啟用方式**:
-```lua
-{
-  "kevinhwang91/nvim-ufo",
-  dependencies = "kevinhwang91/promise-async",
-  event = "BufReadPost",
-  config = function()
-    require("configs.ufo")
-  end,
-},
-```
-
-**配置檔案**: `lua/configs/ufo.lua`
-**狀態**: ⏸️ 已配置但未啟用
+- **用途**：sidebar diff workflow，select code → ask → diff → apply
+- **config**：`configs/avante.lua`
+- **adapter**：copilot、model=claude-sonnet-4
+- **build**：`make`（編譯 4 個 Rust dylib）
+- **快捷鍵**：`<leader>Aa` ask / `<leader>Ae` edit / `<leader>At` toggle sidebar / `<leader>Ar` refresh / `<leader>Am` 切模型
+- **diff conflicts**：`co/ct/ca/cb/cc`、`]x/[x`
 
 ---
 
-## 🚀 進階插件（特殊用途）
+## 🔧 LSP / Mason / Formatter
 
-以下插件**未建立配置**，但值得考慮：
+### neovim/nvim-lspconfig
 
-### 9. nvim-spectre - 全局搜尋替換
+- **config**：`configs/lspconfig.lua`
+- **API**：0.11+ `vim.lsp.config()` / `vim.lsp.enable()`
+- **on_attach**：buffer-local LSP 快捷鍵 + inlay hints 自動啟用
+- **capabilities**：來自 `blink.cmp.get_lsp_capabilities()`
+- **已配置 server**：`html` / `cssls` / `pyright` / `clangd` / `ts_ls` / `lua_ls`
+- **快捷鍵**：`gd/gD/gi/gr/gy/K/<C-k>/<leader>rn/<leader>ca/<leader>cd/[d/]d/<leader>ti`
 
-**用途**: 視覺化的全局搜尋與替換（類似 VSCode 的 Search & Replace）
+### williamboman/mason.nvim — LSP/工具包管理器
 
-**安裝**:
-```lua
-{
-  "nvim-pack/nvim-spectre",
-  cmd = "Spectre",
-  keys = {
-    { "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
-  },
-  opts = { open_cmd = "noswapfile vnew" },
-}
-```
+- **opts**：rounded border、自訂 icons
 
-**快捷鍵**:
-- `<leader>sr` - 開啟 Spectre
+### WhoIsSethDaniel/mason-tool-installer.nvim — 自動安裝
 
----
+- **config**：`configs/mason-tool-installer.lua`
+- **ensure_installed**：`lua-language-server` / `stylua` / `css-lsp` / `html-lsp` / `typescript-language-server` / `prettier` / `eslint-lsp` / `clangd` / `clang-format` / `pyright` / `black` / `mypy` / `debugpy`
+- **指令**：`:MasonToolsInstall` / `:MasonToolsUpdate`
 
-### 10. dial.nvim - 增強 Ctrl+a/Ctrl+x
+### stevearc/conform.nvim — Formatter
 
-**用途**: 增強數字遞增/遞減（支援日期、布林值、顏色等）
-
-**效果**:
-```lua
-true  → Ctrl+a → false
-#ff0000 → Ctrl+a → #ff0001
-2024-01-01 → Ctrl+a → 2024-01-02
-```
-
-**安裝**:
-```lua
-{
-  "monaqa/dial.nvim",
-  keys = { "<C-a>", { "<C-x>", mode = "n" } },
-  config = function()
-    local augend = require("dial.augend")
-    require("dial.config").augends:register_group({
-      default = {
-        augend.integer.alias.decimal,
-        augend.integer.alias.hex,
-        augend.date.alias["%Y/%m/%d"],
-        augend.constant.alias.bool,
-      },
-    })
-  end,
-}
-```
+- **config**：`configs/conform.lua`
+- **trigger**：BufWritePre 保存時自動格式化
+- **fallback**：無專用 formatter 時用 LSP
 
 ---
 
-### 11. mini.move - 移動行/區塊
+## 🌳 Treesitter
 
-**用途**: 使用 Alt+hjkl 快速移動行或選取區塊
+### nvim-treesitter/nvim-treesitter
 
-**效果**:
+- **config**：`configs/treesitter.lua`
+- **ensure_installed**：vim/vimdoc/lua/luadoc/c/cpp/python/javascript/typescript/tsx/html/css/json/yaml/toml/markdown/markdown_inline/bash/regex/query
+- **incremental selection**：`grn` (init/expand) / `grm` (shrink) / `grs` (scope)
+  - 避免與 blink.cmp 的 `<C-Space>` 觸發鍵衝突
+
+---
+
+## 🔍 Picker / Explorer / Git
+
+### nvim-telescope/telescope.nvim
+
+- **config**：`configs/telescope.lua`
+- **依賴**：plenary、telescope-fzf-native（make build）
+- **快捷鍵**：`<leader>ff/fw/fb/fh/fo/fm/fk/fr`
+
+### nvim-tree/nvim-tree.lua — 側邊欄檔案樹
+
+- **config**：`configs/nvim-tree.lua`
+- **快捷鍵**：`<leader>e` toggle / `<leader>E` reveal
+
+### stevearc/oil.nvim — buffer-style 目錄編輯
+
+- **config**：`configs/oil.lua`
+- **與 nvim-tree 共存**：default_file_explorer = false
+- **快捷鍵**：`-` 開父目錄、`<leader>fo` 浮動視窗
+- **safer**：delete_to_trash = true
+
+### lewis6991/gitsigns.nvim — Git 邊欄
+
+- **config**：`configs/gitsigns.lua`
+- **顯示**：邊欄 hunk 符號、preview / blame
+- **快捷鍵**：
+  - `]c` / `[c` 上下 hunk
+  - `<leader>gs/gr` stage/reset hunk
+  - `<leader>gS/gR` stage/reset buffer
+  - `<leader>gp` preview
+  - `<leader>gd/gD` diff this / diff HEAD~
+  - `<leader>gb` full blame
+  - `<leader>tb` toggle inline blame
+  - `ih` (v/o) hunk textobject
+
+---
+
+## ⌨️ Editor 增強
+
+### folke/flash.nvim — 跳轉
+
+- **config**：`configs/flash.lua`
+- **快捷鍵**：`s` jump、`S` treesitter、`r` (o) remote、`R` (o/x) treesitter search、`<C-s>` (c) toggle search
+
+### kylechui/nvim-surround — 括號操作
+
+- **config**：`configs/surround.lua`
+- **版本**：v4（已移除 setup keymaps 寫法，沿用插件預設）
+- **預設按鍵**（無需設定）：`ys{motion}{char}` / `ds{char}` / `cs{old}{new}` / Visual `S{char}`
+
+### echasnovski/mini.ai — 智慧 textobject
+
+- **opts**：`n_lines = 500`
+- **效果**：`a)` / `i)` 等更聰明（支援多行、跨檔結構）
+
+### echasnovski/mini.bracketed — `]x/[x` 跳轉
+
+- **效果**：`]b/[b` buffer、`]d/[d` diagnostic、`]q/[q` quickfix、`]l/[l` location list、`]t/[t` treesitter node 等
+
+### folke/trouble.nvim — 診斷面板
+
+- **config**：`configs/trouble.lua`
+- **指令**：`:Trouble`、`:TroubleToggle`
+
+### kevinhwang91/nvim-ufo — 智慧折疊
+
+- **config**：`configs/ufo.lua`
+- **依賴**：promise-async
+- **快捷鍵**：`zR` 全開 / `zM` 全合 / `zr` fold less / `zm` fold more / `zp` peek
+- **fillchars**：foldopen `▾` / foldclose `▸`（用 Unicode 三角形以避開 NerdFont PUA 字元被剝光）
+
+### akinsho/toggleterm.nvim — 浮動終端
+
+- **config**：`configs/toggleterm.lua`
+- **快捷鍵**：`<C-\>` toggle / `<leader>tf/th/tv` float/horizontal/vertical / `<leader>gg` lazygit / `<leader>tp` Python REPL / `<leader>tn` Node REPL
+
+### windwp/nvim-autopairs — 自動配對
+
+- **event**：InsertEnter
+- **opts**：預設
+
+---
+
+## 🧭 Navigation
+
+### christoomey/vim-tmux-navigator
+
+- **快捷鍵**：`<C-h/j/k/l>` 跨 nvim 與 tmux pane 導航、`<C-\>` 上一個 pane
+
+---
+
+## ⛔ 已停用 / 預留
+
+### vim-illuminate — 高亮相同詞
+
+- **狀態**：spec 已註解、config 仍在
+- **替代**：snacks.words 可達類似效果
+- **啟用**：取消 `plugins/init.lua` 末段註解
+
+### mini.move — Alt+hjkl 移動行/塊
+
+- **狀態**：移除（Mac 終端 Option 不送 Meta，且 Visual J/K 已等價）
+
+---
+
+## 📦 完整依賴樹
+
 ```
-Alt+j → 向下移動當前行
-Alt+k → 向上移動當前行
-Visual 模式 + Alt+j → 向下移動選取區塊
-```
-
-**安裝**:
-```lua
-{
-  "echasnovski/mini.move",
-  version = "*",
-  config = function()
-    require("mini.move").setup({
-      mappings = {
-        left = "<M-h>",
-        right = "<M-l>",
-        down = "<M-j>",
-        up = "<M-k>",
-        line_left = "<M-h>",
-        line_right = "<M-l>",
-        line_down = "<M-j>",
-        line_up = "<M-k>",
-      },
-    })
-  end,
-}
+plenary.nvim ── telescope / codecompanion / avante / gitsigns / todo-comments
+nui.nvim     ── noice / avante / codecompanion / dressing
+nvim-web-devicons ── lualine / bufferline / nvim-tree / oil / avante / telescope
+nvim-notify  ── noice
+promise-async ── nvim-ufo
+friendly-snippets ── LuaSnip ── blink.cmp
+copilot.lua  ── codecompanion / avante（共用 Copilot 認證）
 ```
 
 ---
 
-## 📊 插件選擇指南
-
-### 按使用頻率
-
-| 頻率 | 插件 | 建議 |
-|------|------|------|
-| 極高 | flash.nvim, nvim-surround | ✅ 必裝 |
-| 高 | todo-comments, trouble.nvim | ✅ 推薦 |
-| 中 | toggleterm, dressing.nvim | ⚠️ 視需求 |
-| 低 | illuminate, nvim-ufo | ⏸️ 可選 |
-
-### 按功能類別
+## 📊 速查：按類別
 
 | 類別 | 插件 |
-|------|------|
-| **導航跳轉** | flash.nvim, illuminate |
-| **編輯增強** | nvim-surround, dial.nvim, mini.move |
-| **視覺體驗** | todo-comments, dressing.nvim, nvim-ufo |
-| **診斷除錯** | trouble.nvim |
-| **終端整合** | toggleterm.nvim |
-| **搜尋替換** | nvim-spectre |
+|---|---|
+| **主題 / UI** | catppuccin、lualine、bufferline、snacks、which-key、noice、dressing、indent-blankline、todo-comments、fidget、treesitter-context、lspkind |
+| **補全 / Snippet** | blink.cmp、LuaSnip、friendly-snippets |
+| **AI** | copilot.lua、CodeCompanion、avante.nvim |
+| **LSP / Mason** | nvim-lspconfig、mason.nvim、mason-tool-installer、conform |
+| **Treesitter** | nvim-treesitter、nvim-treesitter-context |
+| **Picker / Explorer / Git** | telescope（+ fzf-native）、nvim-tree、oil、gitsigns |
+| **Editor 增強** | flash、surround、mini.ai、mini.bracketed、trouble、ufo、toggleterm、autopairs |
+| **Navigation** | vim-tmux-navigator |
 
 ---
 
-## 🔧 安裝與啟用
-
-### 必裝插件（已啟用）
-
-無需額外操作，重啟 Neovim 即可：
-
-```bash
-nvim
-# Lazy.nvim 會自動安裝新插件
-```
-
-### 可選插件（需手動啟用）
-
-1. 編輯 `lua/plugins/init.lua`
-2. 找到對應插件的註解區塊
-3. 取消註解（刪除 `--`）
-4. 重啟 Neovim 或執行 `:Lazy sync`
-
-**範例**:
-```lua
--- 啟用前（註解狀態）
--- {
---   "stevearc/dressing.nvim",
---   event = "VeryLazy",
---   config = function()
---     require("configs.dressing")
---   end,
--- },
-
--- 啟用後（取消註解）
-{
-  "stevearc/dressing.nvim",
-  event = "VeryLazy",
-  config = function()
-    require("configs.dressing")
-  end,
-},
-```
-
-### 進階插件（需手動配置）
-
-1. 將安裝代碼加入 `lua/plugins/init.lua`
-2. 重啟 Neovim
-3. 執行 `:Lazy sync`
-
----
-
-## 🐛 疑難排解
-
-### 插件載入失敗
+## 🔄 維護指令
 
 ```vim
-" 1. 檢查 Lazy 狀態
-:Lazy
-
-" 2. 同步插件
-:Lazy sync
-
-" 3. 清除並重新安裝
-:Lazy clean
-:Lazy install
-```
-
-### 配置錯誤
-
-```vim
-" 檢查錯誤訊息
-:messages
-
-" 檢查健康狀態
-:checkhealth lazy
-```
-
-### 按鍵衝突
-
-若發現按鍵衝突，檢查：
-
-```vim
-" 查看所有映射
-:map s       " 檢查 's' 鍵
-:verbose map s  " 檢查映射來源
+:Lazy                       " 插件管理 UI
+:Lazy update                " 更新全部
+:Lazy clean                 " 清除已 disable / 移除的
+:MasonToolsInstall          " 安裝 mason-tool-installer 清單
+:MasonToolsUpdate           " 更新
+:TSUpdate                   " 更新 treesitter parser
+:checkhealth                " 全面健康檢查
 ```
 
 ---
 
-## 📚 參考資源
-
-### 官方文檔
-
-- [flash.nvim](https://github.com/folke/flash.nvim)
-- [todo-comments.nvim](https://github.com/folke/todo-comments.nvim)
-- [nvim-surround](https://github.com/kylechui/nvim-surround)
-- [trouble.nvim](https://github.com/folke/trouble.nvim)
-- [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim)
-
-### 相關技能
-
-- `:help flash.nvim`
-- `:help todo-comments`
-- `:help nvim-surround.usage`
-- `:TodoTelescope` - 搜尋所有 TODO
-- `:TroubleToggle` - 切換診斷面板
-
----
-
-## 🎯 總結
-
-### 必裝清單（5 個）
-
-1. ✅ flash.nvim - 超快速跳轉
-2. ✅ todo-comments.nvim - TODO 高亮
-3. ✅ nvim-surround - 括號操作
-4. ✅ trouble.nvim - 診斷面板
-5. ✅ toggleterm.nvim - 終端管理
-
-**預期效果**: 編輯效率提升 30-50%，視覺體驗大幅改善
-
-### 推薦搭配
-
-**Python 開發者**:
-- 必裝 5 個 + toggleterm (Python REPL)
-
-**Web 開發者**:
-- 必裝 5 個 + dressing.nvim
-
-**大型專案維護者**:
-- 必裝 5 個 + nvim-spectre + illuminate
-
----
-
-**維護建議**: 每月執行一次 `:Lazy update` 更新所有插件。
-
-最後更新: 2026-01-31
+最後更新：2026-05-27
