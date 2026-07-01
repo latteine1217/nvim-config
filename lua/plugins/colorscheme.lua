@@ -1,14 +1,20 @@
 --[[
 Module: plugins.colorscheme
-Purpose: 主題 override。catppuccin 已隨 LazyVim 內建。
-Note: 直接指定 flavour 專屬 colorscheme 名稱（catppuccin-<flavour>），
-      避免 LazyVim 套色時序早於 flavour opt 生效造成的 race（會誤用預設 mocha）。
-      可用值：catppuccin-latte / -frappe / -macchiato / -mocha
+Purpose: 主題 override。改用 onedark（NvChad 招牌調性：近黑中性深底、非藍紫冷調）。
+Note: style 可選 dark / darker / deep / cool / warm / warmer；darker≈NvChad 預設底色。
 --]]
 
 return {
   {
+    "navarasu/onedark.nvim",
+    priority = 1000,
+    opts = {
+      style = "darker", -- 近似 NvChad onedark 的 #1e222a 深底
+      transparent = false,
+    },
+  },
+  {
     "LazyVim/LazyVim",
-    opts = { colorscheme = "catppuccin-macchiato" },
+    opts = { colorscheme = "onedark" },
   },
 }
