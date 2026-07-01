@@ -8,7 +8,7 @@ return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    opts = { flavour = "mocha" },
+    opts = { flavour = "macchiato" },
   },
 
   -- 讓 LazyVim 啟動時套用 catppuccin
