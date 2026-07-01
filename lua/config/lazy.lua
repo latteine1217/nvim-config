@@ -19,6 +19,7 @@ require("lazy").setup({
 
     -- extras 由 lazyvim.json 管理；以下匯入該檔啟用的模組
     { import = "lazyvim.plugins.extras.lang.python" },
+    { import = "lazyvim.plugins.extras.lang.tex" },
     { import = "lazyvim.plugins.extras.lang.markdown" },
     { import = "lazyvim.plugins.extras.lang.json" },
     { import = "lazyvim.plugins.extras.lang.yaml" },
@@ -31,6 +32,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.dap.core" },
     { import = "lazyvim.plugins.extras.test.core" },
     { import = "lazyvim.plugins.extras.editor.refactoring" },
+    { import = "lazyvim.plugins.extras.ui.treesitter-context" },
 
     -- 本地 override / 新增插件
     { import = "plugins" },
